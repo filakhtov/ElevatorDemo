@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+    <head>
+        <title>Lender411 Elevator Test</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/pub/elevator.js"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
+        <link rel="stylesheet" href="/pub/style.css" />
+    </head>
+
+    <body data-ng-app="lender411" class="container" data-ng-controller="elevatorController" data-ng-cloak="">
+        <div class="row">
+            <div class="col col-xs-12" data-ng-show="elevator">
+                <ol reversed="reversed">
+                    <li data-ng-repeat="floor in floors| orderBy:'-number'" class="floor" data-ng-class="{'bg-warning': !floor.status}">
+                        <span data-ng-switch="elevator.state" data-ng-if="elevator.currentFloor === floor.number" class="bg-primary text-center">
+                            <span class="glyphicon glyphicon-ban-circle" data-ng-switch-when="0"></span>
+                            <span class="glyphicon glyphicon-arrow-up" data-ng-switch-when="1"></span>
+                            <span class="glyphicon glyphicon-arrow-down" data-ng-switch-when="-1"></span>
+                            <span class="glyphicon glyphicon-sound-stereo" data-ng-switch-when="2"></span>
+                            <span class="glyphicon glyphicon-bell" data-ng-switch-when="3"></span>
+                        </span>
+                    </li>
+                </ol>
+
+                <p data-ng-if="error" class="bg-danger">{{error}}</p>
+
+                <p class="bg-info">{{elevator.description}}</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-xs-12 col-md-2">
+                <select class="form-control" data-ng-options="floor.number for floor in floors" data-ng-model="request.from" required="required">
+                    <option value="">From</option>
+                </select>
+            </div>
+            <div class="col col-xs-12 col-md-2">
+                <select class="form-control" data-ng-options="floor.number for floor in floors" data-ng-model="request.to" required="required">
+                    <option value="">To</option>
+                </select>
+            </div><div class="col col-xs-12 col-md-2">
+                <button type="button" class="btn btn-success" data-ng-click="sendRequest()">Send request</button>
+            </div><div class="col col-xs-12 col-md-6 text-center">
+                <button type="button" class="btn btn-default" data-ng-click="openDoor()">Open door</button>
+                <button type="button" class="btn btn-warning" data-ng-click="closeDoor()">Close door</button>
+                <button type="button" class="btn btn-danger" data-ng-click="alarm()">Alarm</button>
+                <button type="button" class="btn btn-primary" data-ng-click="reset()">Reset</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-xs-12 bg-info" data-ng-hide="elevator">
+                Loading, please wait...
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-xs-12">
+                <ol>
+                    <li data-ng-repeat="request in requests track by $index">{{request}}</li>
+                </ol>
+            </div>
+        </div>
+
+    </body>
+
+</html>
